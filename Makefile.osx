@@ -10,7 +10,7 @@ PROJ_WARNINGS = -Wall -Wextra
 PROJ_CCFLAGS  = -ggdb -std=c++0x -O3 -fstrict-aliasing -D __STDC_FORMAT_MACROS
 PROJ_LDFLAGS  =
 
-.PHONY all clean distclean output
+.PHONY: all clean distclean output
 
 all:: ${TARGET}
 

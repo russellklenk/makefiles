@@ -15,7 +15,7 @@ PROJ_LDFLAGS  = -s -Wl,--subsystem,console
 CC = g++
 RC = windres
 
-.PHONY all clean distclean output
+.PHONY: all clean distclean output
 
 all:: ${TARGET}
 
