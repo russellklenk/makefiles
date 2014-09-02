@@ -1,0 +1,40 @@
+TARGET        = target_name
+LIBRARIES     = -lkernel32 -luser32 -lcomctl32 -lgdi32 -lwinmm
+HEADERS       = $(wildcard include/*.hpp)
+SOURCES       = $(wildcard src/*.cpp)
+RESOURCES     = $(wildcard res/*.rc)
+OBJECTS       = ${SOURCES:.cpp=.o}
+DEPENDENCIES  = ${SOURCES:.cpp=.dep}
+RSRC_OBJECTS  = ${RESOURCES:.rc=.o}
+INCLUDE_DIRS  = -I. -Iinclude
+LIBRARY_DIRS  = -Llib
+PROJ_WARNINGS = -Wall -Wextra
+PROJ_CCFLAGS  = -std=c++0x -O3 -fstrict-aliasing -D __STDC_FORMAT_MACROS -D UNICODE -D _UNICODE -D _WIN32 -D _WIN32_IE=0x500 -D WINVER=0x500
+PROJ_LDFLAGS  = -s -Wl,--subsystem,console
+
+CC = g++
+RC = windres
+
+.PHONY all clean distclean output
+
+all:: ${TARGET}
+
+${TARGET}: ${OBJECTS} ${RSRC_OBJECTS}
+	${CC} ${LIBRARY_DIRS} ${LDFLAGS} ${PROJ_LDFLAGS} -o $@ $^ ${LIBRARIES}
+
+${OBJECTS}: %.o: ${SOURCES} ${DEPENDENCIES}
+	${CC} ${INCLUDE_DIRS} ${CCFLAGS} ${PROJ_CCFLAGS} -o $@ -c $<
+
+${RSRC_OBJECTS}: %.o: %.rc
+	${RC} -Iinclude -Ires -i $< -o $@
+
+${DEPENDENCIES}: %.dep: ${SOURCES} ${HEADERS} ${RESOURCES} Makefile.w32
+	${CC} ${INCLUDE_DIRS} ${CCFLAGS} ${PROJ_CCFLAGS} -MM $< > $@
+
+output:: ${TARGET}
+
+clean::
+	rm -f *~ *.o *.dep res/*~ res/*.o res/*.dep src/*~ src/*.o src/*.dep ${TARGET}
+
+distclean:: clean
+
