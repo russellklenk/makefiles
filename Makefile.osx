@@ -17,10 +17,10 @@ all:: ${TARGET}
 ${TARGET}: ${OBJECTS}
 	${CC} ${LIBRARY_DIRS} ${LDFLAGS} ${PROJ_LDFLAGS} -o $@ $^ ${LIBRARIES}
 
-${OBJECTS}: %.o: ${SOURCES} ${DEPENDENCIES}
+${OBJECTS}: %.o: %.cpp ${DEPENDENCIES}
 	${CC} ${INCLUDE_DIRS} ${CCFLAGS} ${PROJ_CCFLAGS} -o $@ -c $<
 
-${DEPENDENCIES}: %.dep: ${SOURCES} ${HEADERS} Makefile.osx
+${DEPENDENCIES}: %.dep: %.cpp ${HEADERS} Makefile.osx
 	${CC} ${INCLUDE_DIRS} ${CCFLAGS} ${PROJ_CCFLAGS} -MM $< > $@
 
 output:: ${TARGET}
